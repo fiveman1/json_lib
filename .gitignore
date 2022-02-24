@@ -1,4 +1,4 @@
 .idea
 cmake-build-debug
-json
+json_test
 *.o

@@ -10,9 +10,9 @@ int main() {
 
     picojson::value v;
     json >> v;
-    picojson::array arr = v.get<picojson::array>();
-    JsonValue first = arr[0];
-    JsonObject command = first;
+
+    JsonArray arr = JsonValue(v);
+    JsonObject command = arr[0];
     JsonObject drone = command["params"];
     double speed = drone["speed"];
     std::string name = drone["name"];
@@ -22,8 +22,7 @@ int main() {
 
     JsonObject obj;
     obj["mother"] = "the j";
-    JsonValue val(obj);
-    std::cout << "val: " << val << std::endl;
+    std::cout << "val: " << obj << std::endl;
 
     return 0;
 }

@@ -1,10 +1,10 @@
 CXX = g++
 CFLAGS = -std=c++17 -Og -g -Idependencies/include -Ldependencies/lib -lCppWebServer
 
-all: json
+all: json_test
 
-json: main.cpp
+json_test: main.cpp
 	$(CXX) $(CFLAGS) $^ -o $@
 
 clean:
-	rm *.o json
+	rm *.o json_test
