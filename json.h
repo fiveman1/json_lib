@@ -6,7 +6,6 @@
 #include <initializer_list>
 #include <string>
 #include <utility>
-#include <unordered_map>
 
 #include "WebServer.h"
 #include "picojson.h"
