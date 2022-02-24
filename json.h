@@ -209,12 +209,12 @@ public:
     // JSON ARRAY
 
     /**
-     * @return Converts this to a double
+     * @return Converts this to a JsonArray
      */
     operator JsonArray() const;
 
     /**
-     * @brief Set this value to a double
+     * @brief Set this value to a JsonArray
      * @return this
      */
     JsonValue& operator=(const JsonArray& a);
