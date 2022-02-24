@@ -128,7 +128,7 @@ public:
     /**
      * @return Converts this to a double
      */
-    operator double() { return Get<double>(); }
+    operator double() const { return Get<double>(); }
 
     /**
      * @brief Set this value to a double
@@ -136,12 +136,25 @@ public:
      */
     JsonValue& operator=(double d) { Set(d); return *this; }
 
+    // FLOAT
+
+    /**
+     * @return Converts this to a float
+     */
+    operator float() const { return static_cast<float>(Get<double>()); }
+
+    /**
+     * @brief Set this value to a float
+     * @return this
+     */
+    JsonValue& operator=(float f) { Set(static_cast<double>(f)); return *this; }
+
     // INT
 
     /**
      * @return Converts this to an int
      */
-    operator int() { return static_cast<int>(Get<double>()); }
+    operator int() const { return static_cast<int>(Get<double>()); }
 
     /**
      * @brief Set this value to an int
@@ -154,7 +167,7 @@ public:
     /**
      * @return Converts this to a string
      */
-    operator std::string() { return Get<std::string>(); }
+    operator std::string() const { return Get<std::string>(); }
 
     /**
      * @brief Set this value to a string
@@ -173,7 +186,7 @@ public:
     /**
      * @return Converts this to a bool
      */
-    operator bool() { return Get<bool>(); }
+    operator bool() const { return Get<bool>(); }
 
     /**
      * @brief Set this value to a bool
@@ -184,22 +197,22 @@ public:
     // JSON OBJECT
 
     /**
+     * @return Converts this to a JsonObject
+     */
+    operator JsonObject() const;
+
+    /**
      * @brief Set this value to a JsonObject
      * @return this
      */
     JsonValue& operator=(const JsonObject& o);
-
-    /**
-     * @return Converts this to a JsonObject
-     */
-    operator JsonObject();
 
     // JSON ARRAY
 
     /**
      * @return Converts this to a double
      */
-    operator JsonArray();
+    operator JsonArray() const;
 
     /**
      * @brief Set this value to a double
@@ -215,7 +228,7 @@ public:
 
 protected:
     template<class T>
-    T Get() { return GetValue().get<T>(); }
+    T Get() const { return GetValue().get<T>(); }
 
     template<class T>
     void Set(const T& t) { GetValue() = picojson::value(t); }
@@ -245,12 +258,6 @@ public:
      * @param obj: a picojson::object
      */
     JsonObject(picojson::object obj) : obj(std::move(obj)) {}
-
-    /**
-     * @brief Construct from a JsonValue
-     * @param val: a JsonValue (must be a JSON object)
-     */
-    JsonObject(const JsonValue& val) : obj(val.GetValue().get<picojson::object>()) {}
 
     /**
      * @brief Read/write access to a value in this JSON object from a given key.
@@ -332,12 +339,6 @@ public:
     JsonArray(picojson::array arr) : arr(std::move(arr)) {}
 
     /**
-     * @brief Construct from a JsonValue
-     * @param val: a JsonValue (must be a JSON array)
-     */
-    JsonArray(const JsonValue& val) : arr(val.GetValue().get<picojson::array>()) {}
-
-    /**
      * @brief Construct using an initializer list
      * @param ls: the initializer list
      *
@@ -399,6 +400,14 @@ public:
      * JsonObject obj = arr[2];
      */
     JsonValue operator[](int idx) const { return arr.at(idx); }
+
+    /**
+     * @brief Refer to operator[] const
+     * @throws std::runtime_error: if the index is not within the bounds of the array
+     * @param idx: the index
+     * @return a COPY of the entry at the given index
+     */
+    JsonValue At(int idx) const { return arr.at(idx); }
 
     /**
      * @brief Push a JsonValue to the array (like std::vector::push_back())
@@ -518,7 +527,7 @@ inline JsonValue& JsonValue::operator=(const JsonObject& o) {
     return *this;
 }
 
-inline JsonValue::operator JsonObject() {
+inline JsonValue::operator JsonObject() const {
     return {Get<picojson::object>()};
 }
 
@@ -527,7 +536,7 @@ inline JsonValue& JsonValue::operator=(const JsonArray& a) {
     return *this;
 }
 
-inline JsonValue::operator JsonArray() {
+inline JsonValue::operator JsonArray() const {
     return {Get<picojson::array>()};
 }
 
