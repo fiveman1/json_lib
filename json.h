@@ -486,11 +486,13 @@ inline JsonValue::JsonValue(const JsonValue& other) {
 }
 
 inline JsonValue& JsonValue::operator=(const JsonValue& other) {
-    isRef = other.isRef;
-    if (isRef) {
-        ref = other.ref;
-    } else {
-        v = other.v;
+    if (this != &other) {
+        isRef = other.isRef;
+        if (isRef) {
+            ref = other.ref;
+        } else {
+            v = other.v;
+        }
     }
     return *this;
 }
